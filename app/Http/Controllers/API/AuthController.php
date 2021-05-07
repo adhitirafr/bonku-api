@@ -6,20 +6,41 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\{UserRegisterRequest, UserLoginRequest};
 use App\Models\User;
+use DB;
 
 class AuthController extends Controller
 {
     public function register(UserRegisterRequest $request)
     {
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => bcrypt($request->password),
-        ]);
+        DB::beginTransaction();
 
-        // $user->roles()->attach(2); // Simple user role
+        try {
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'password' => bcrypt($request->password),
+            ]);
+    
+            $authToken = $user->createToken('auth-token')->plainTextToken;
 
-        return response()->json($user);
+            DB::commit();
+    
+            return response()->json([
+                'code' => 200,
+                'message' => 'Akun berhasil dibuat',
+                'access_token' => $authToken,
+            ]);
+        }
+        catch(\Exception $e) {
+            DB::rollback();
+
+            return response()->json([
+                'code' => 500,
+                'error_message' => $e,
+                'message' => 'Akun tidak dapat dibuat',
+            ]);
+        }
+        
     }
 
     public function login(UserLoginRequest $request)
