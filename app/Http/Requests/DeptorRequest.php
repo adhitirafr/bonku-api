@@ -24,14 +24,14 @@ class DeptorRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => 'required|string|email',
+            'name' => 'required|string',
         ];
     }
 
     public function messages()
     {
         return [
-            'email.required' => 'Email dibutuhkan',
+            'name.required' => 'Nama dibutuhkan',
         ];
     }
 }

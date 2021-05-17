@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\DeptRequest;
 use App\Http\Resources\{DeptResource, DeptCollectionResource};
 use App\Models\{Dept, Deptor};
-use Auth;
+use Auth, Log;
 
 class DeptController extends Controller
 {
@@ -15,13 +15,17 @@ class DeptController extends Controller
     {
         $lists = Auth::user()->deptor;
 
-        $items = array();
+        $deptor_depts = [];
 
-        foreach ($lists as $list) {
-            $items[] = $list->dept;
+        foreach ($lists as $index => $list) {
+            if(count($list->dept->where('status', 1)) > 0) {
+                array_push($deptor_depts, [
+                    $list->dept
+                ]);
+            }
         }
 
-        return DeptCollectionResource::collection($items);
+        return DeptCollectionResource::collection($deptor_depts);
     }
 
     public function show(Request $request)

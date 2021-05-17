@@ -4,10 +4,9 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use App\Http\Requests\DeptorRequest;
 use App\Http\Resources\DeptorResource;
 use App\Models\Deptor;
-use Auth;
+use Auth, Log;
 
 class DeptorController extends Controller
 {
@@ -22,7 +21,7 @@ class DeptorController extends Controller
 
     //-- Simpan data penghutang baru
 
-    public function store(DeptorRequest $request) 
+    public function store(Request $request) 
     {
         $user = Auth::user();
 
@@ -79,7 +78,7 @@ class DeptorController extends Controller
     //-- Show penghutang
 
     public function show(Request $request)
-    {   
+    {
         $user = Deptor::find($request->deptor);
 
         return new DeptorResource($user);

@@ -17,10 +17,11 @@ class DeptorResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'phone_number' => $this->phone_number,
-            'identity' => $this->identity,
-            'address' => $this->address,
-            'note' => $this->note,
+            'email' => $this->email ? $this->email : '',
+            'phone_number' => $this->phone_number ? $this->phone_number : '',
+            'identity' => $this->identity ? $this->identity : '',
+            'address' => $this->address ? $this->address : '',
+            'note' => $this->note? $this->note : '',
             'total_dept' => format_uang(0),
             'depts' => DeptResource::collection($this->dept)
         ];

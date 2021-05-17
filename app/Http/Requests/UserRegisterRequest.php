@@ -32,7 +32,7 @@ class UserRegisterRequest extends FormRequest
 
     public function messages()
     {
-        return [
+        return  [
             'name.required' => 'Nama dibutuhkan!',
             'email.email' => 'Format email salah!',
             'email.unique' => 'Email sudah terdaftar',

@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\{UserRegisterRequest, UserLoginRequest};
 use App\Models\User;
-use DB;
+use DB, Log;
 
 class AuthController extends Controller
 {
@@ -20,48 +20,59 @@ class AuthController extends Controller
                 'email' => $request->email,
                 'password' => bcrypt($request->password),
             ]);
-    
-            $authToken = $user->createToken('auth-token')->plainTextToken;
 
-            DB::commit();
+            if($user) {
+                $authToken = $user->createToken('auth-token')->plainTextToken;
+                DB::commit();
     
-            return response()->json([
-                'code' => 200,
-                'message' => 'Akun berhasil dibuat',
-                'access_token' => $authToken,
-            ]);
+                return response()->json([
+                    'message' => 'Akun berhasil dibuat',
+                    'access_token' => $authToken,
+                ], 200);
+            }
+            else {
+                return response()->json([
+                    'message' => 'Akun sudah ada',
+                ], 500);
+            }
         }
         catch(\Exception $e) {
+            Log::info($e);
             DB::rollback();
 
             return response()->json([
-                'code' => 500,
-                'error_message' => $e,
                 'message' => 'Akun tidak dapat dibuat',
-            ]);
+            ], 500);
         }
         
     }
 
     public function login(UserLoginRequest $request)
     {
-        $credentials = request(['email', 'password']);
-        if (!auth()->attempt($credentials)) {
+        try {
+            $credentials = request(['email', 'password']);
+            if (!auth()->attempt($credentials)) {
+                return response()->json([
+                    'message' => 'Email atau password salah',
+                ], 404);
+            }
+
+            $user = User::where('email', $request->email)->first();
+            $authToken = $user->createToken('auth-token')->plainTextToken;
+
             return response()->json([
-                'message' => 'The given data was invalid.',
-                'errors' => [
-                    'password' => [
-                        'Invalid credentials'
-                    ],
-                ]
-            ], 422);
+                'access_token' => $authToken,
+            ], 200);
         }
-
-        $user = User::where('email', $request->email)->first();
-        $authToken = $user->createToken('auth-token')->plainTextToken;
-
-        return response()->json([
-            'access_token' => $authToken,
-        ]);
+        catch(ModelNotFoundException $e) {
+            return response()->json([
+                'message' => 'User tidak ditemukan',
+            ], 404);
+        }
+        catch (Exception $e) { // Anything that went wrong
+            return response()->json([
+                'message' => 'Email atau password salah',
+            ], 404);
+        }
     }
 }
