@@ -18,16 +18,14 @@ class DeptCollectionResource extends JsonResource
 
         for($i = 0; $i < count($this->all()); $i++) {
             array_push($data, [
-                'id' => $this[$i]->id,
-                'name' => $this[$i]->name,
-                'phone_number' => $this[$i]->phone_number,
-                'identity' => $this[$i]->identity,
-                'address' => $this[$i]->address,
-                'note' => $this[$i]->note,
-                'total_dept' => format_uang(0),
+                'name' => $this[$i]->deptor->name,
+                'original_dept' => format_uang($this[$i]->original_dept),
+                'interest' => $this[$i]->interest ? $this[$i]->interest : '',
+                'dept_until' => $this[$i]->dept_until ? tglIndo($this[$i]->dept_until): '',
+                'note' => $this[$i]->note ? $this[$i]->note : '',
+                'created_at' => tglIndo($this[$i]->created_at),
             ]);
         }
-
         return $data;
     }
 }

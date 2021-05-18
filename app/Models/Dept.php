@@ -25,6 +25,10 @@ class Dept extends Model
         'status'
     ];
 
+    public function scopeActive($query) {
+        return $query->where('status', 1)->get();
+    }
+
     public function deptor() {
         return $this->belongsTo(Deptor::class);
     }

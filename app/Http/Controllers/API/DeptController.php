@@ -13,19 +13,17 @@ class DeptController extends Controller
 {
     public function index(Request $request)
     {
-        $lists = Auth::user()->deptor;
+        $deptors = Auth::user()->deptor;
 
-        $deptor_depts = [];
+        $allDepts = [];
 
-        foreach ($lists as $index => $list) {
-            if(count($list->dept->where('status', 1)) > 0) {
-                array_push($deptor_depts, [
-                    $list->dept
-                ]);
+        foreach($deptors as $deptor) {
+            if(count($deptor->dept->where('status', 1)) > 0) {
+                array_push($allDepts, $deptor->dept);
             }
         }
 
-        return DeptCollectionResource::collection($deptor_depts);
+        return DeptCollectionResource::collection($allDepts);
     }
 
     public function show(Request $request)
@@ -45,7 +43,7 @@ class DeptController extends Controller
             'interest' => $request->interest,
             'dept_until' => $request->dept_until,
             'note' => $request->note,
-            'status' => 0,
+            'status' => 1,
             'total_dept' => $request->original_dept,
         ]);
 
