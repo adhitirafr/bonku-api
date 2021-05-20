@@ -21,6 +21,8 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::name('profile.update')->put('profile/update', 'App\Http\Controllers\API\UserController@update');
     Route::name('profile.password.update')->put('profile/password', 'App\Http\Controllers\API\UserController@updatePassword');
 
+    Route::get('dept/finish/{id}', 'App\Http\Controllers\API\DeptController@finishDept');
+
     Route::apiResource('deptor', 'App\Http\Controllers\API\DeptorController');
     Route::apiResource('dept', 'App\Http\Controllers\API\DeptController');
 });

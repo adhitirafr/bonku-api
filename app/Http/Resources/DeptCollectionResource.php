@@ -18,6 +18,7 @@ class DeptCollectionResource extends JsonResource
 
         for($i = 0; $i < count($this->all()); $i++) {
             array_push($data, [
+                'id' => $this[$i]->id,
                 'name' => $this[$i]->deptor->name,
                 'original_dept' => format_uang($this[$i]->original_dept),
                 'interest' => $this[$i]->interest ? $this[$i]->interest : '',

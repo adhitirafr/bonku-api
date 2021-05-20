@@ -18,7 +18,7 @@ class DeptController extends Controller
         $allDepts = [];
 
         foreach($deptors as $deptor) {
-            if(count($deptor->dept->where('status', 1)) > 0) {
+            if(count($deptor->dept->where('status', 0)) > 0) {
                 array_push($allDepts, $deptor->dept);
             }
         }
@@ -86,6 +86,19 @@ class DeptController extends Controller
                 'status_code' => 500
             ]);
         }
+    }
+
+    public function finishDept($id)
+    {
+        $dept = Dept::find($id);
+
+        $dept->update([
+            'status' => 1
+        ]);
+
+        return response()->json([
+            'message' => 'Hutang berhasil dilunasi'
+        ]);
     }
 
     public function destroy(Request $request)
