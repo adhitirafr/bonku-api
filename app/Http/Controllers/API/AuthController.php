@@ -37,7 +37,6 @@ class AuthController extends Controller
             }
         }
         catch(\Exception $e) {
-            Log::info($e);
             DB::rollback();
 
             return response()->json([

@@ -16,14 +16,12 @@ class DeptResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            // 'deptor' => $this->deptor,
-            'original_dept' => format_uang($this->original_dept),
-            'interest' => $this->interest,
-            'dept_until' => tglIndo($this->dept_until),
-            'note' => $this->note,
-            'created_at' => tglIndo($this->created_at),
-            'updated+at' => tglIndo($this->updated_at),
-            'total_dept' => format_uang($this->total_dept),
+            'deptor' => $this->deptor,
+            'original_dept' =>$this->original_dept,
+            'interest' => $this->interest ? $this->interest : '',
+            'dept_until' => $this->dept_until ? $this->dept_until : '',
+            'note' => $this->note ? $this->note : '',
+            'total_dept' => $this->total_dept,
         ];
     }
 }

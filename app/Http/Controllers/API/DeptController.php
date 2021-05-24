@@ -19,7 +19,9 @@ class DeptController extends Controller
 
         foreach($deptors as $deptor) {
             if(count($deptor->dept->where('status', 0)) > 0) {
-                array_push($allDepts, $deptor->dept);
+                foreach($deptor->dept as $deptsub) {
+                    if($deptsub->status == 0) array_push($allDepts, $deptsub);
+                }
             }
         }
 
@@ -43,7 +45,7 @@ class DeptController extends Controller
             'interest' => $request->interest,
             'dept_until' => $request->dept_until,
             'note' => $request->note,
-            'status' => 1,
+            'status' => 0,
             'total_dept' => $request->original_dept,
         ]);
 

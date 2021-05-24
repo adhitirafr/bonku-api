@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Log;
 
 class DeptorResource extends JsonResource
 {
@@ -22,8 +23,18 @@ class DeptorResource extends JsonResource
             'identity' => $this->identity ? $this->identity : '',
             'address' => $this->address ? $this->address : '',
             'note' => $this->note? $this->note : '',
-            'total_dept' => format_uang(0),
-            'depts' => DeptResource::collection($this->dept)
+            'total_dept' => format_uang($this->totalDept($this->dept)),
         ];
+    }
+
+    private function totalDept($datas)
+    {
+        $total = 0;
+
+        foreach($datas as $data) {
+            $total += $data->total_dept;
+        }
+
+        return $total;
     }
 }
