@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Route;
 Route::name('login')->post('login', 'App\Http\Controllers\API\AuthController@login');
 Route::name('register')->post('register', 'App\Http\Controllers\API\AuthController@register');
 
+Route::name('verify-user')->get('verify-user/{id}', 'App\Http\Controllers\API\AuthController@verifyUser');
+
 Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::name('profile.show')->get('profile', 'App\Http\Controllers\API\UserController@show');
     Route::name('profile.update')->put('profile/update', 'App\Http\Controllers\API\UserController@update');

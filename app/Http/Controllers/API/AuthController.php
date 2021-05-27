@@ -5,8 +5,10 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Requests\{UserRegisterRequest, UserLoginRequest};
+use App\Mail\API\UserConfirmationRegistration;
 use App\Models\User;
-use DB, Log;
+use Carbon\Carbon;
+use DB, Log, Mail;
 
 class AuthController extends Controller
 {
@@ -22,12 +24,12 @@ class AuthController extends Controller
             ]);
 
             if($user) {
-                $authToken = $user->createToken('auth-token')->plainTextToken;
+                Mail::to($user->email)->send(new UserConfirmationRegistration($user));
                 DB::commit();
-    
+
+
                 return response()->json([
-                    'message' => 'Akun berhasil dibuat',
-                    'access_token' => $authToken,
+                    'message' => 'Email verifikasi sudah dikirim'
                 ], 200);
             }
             else {
@@ -59,6 +61,18 @@ class AuthController extends Controller
             $user = User::where('email', $request->email)->first();
             $authToken = $user->createToken('auth-token')->plainTextToken;
 
+            if(!$user->email_verified_at) {
+                return response()->json([
+                    'message' => 'User belum terverifikasi',
+                ], 401); 
+            }
+
+            if($user->status == 0) {
+                return response()->json([
+                    'message' => 'User tidak aktif',
+                ], 401); 
+            }
+
             return response()->json([
                 'access_token' => $authToken,
             ], 200);
@@ -73,5 +87,19 @@ class AuthController extends Controller
                 'message' => 'Email atau password salah',
             ], 404);
         }
+    }
+
+    public function verifyUser($id)
+    {
+        $user = User::find($id);
+
+        $user->update([
+            'status' => 1,
+            'email_verified_at' => Carbon::now()->toDateTimeString()
+        ]);
+
+        return response()->json([
+            'message' => 'User berhasil diverifikasi'
+        ], 200);
     }
 }
