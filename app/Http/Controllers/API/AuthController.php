@@ -9,6 +9,7 @@ use App\Mail\API\UserConfirmationRegistration;
 use App\Models\User;
 use Carbon\Carbon;
 use DB, Log, Mail;
+use Illuminate\Support\Facades\Redirect;
 
 class AuthController extends Controller
 {
@@ -98,8 +99,6 @@ class AuthController extends Controller
             'email_verified_at' => Carbon::now()->toDateTimeString()
         ]);
 
-        return response()->json([
-            'message' => 'User berhasil diverifikasi'
-        ], 200);
+       return Redirect::away(env('WEB_BONKU_MAIN'));
     }
 }
