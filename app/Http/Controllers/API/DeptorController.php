@@ -10,7 +10,7 @@ use Auth, Log;
 
 class DeptorController extends Controller
 {
-    //-- List 
+    //-- List daftar penghutang
 
     public function index(Request $request)
     {

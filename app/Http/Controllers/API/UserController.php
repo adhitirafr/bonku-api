@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Http\Resources\UserResource;
 use App\Http\Requests\{UserRegisterRequest, UserLoginRequest};
 use App\Models\User;
 use Hash, DB, Str, Log;
@@ -11,10 +12,10 @@ use Auth;
 
 class UserController extends Controller
 {
-    public function show()
+    public function show(Request $request)
     {
         $user = Auth::user();
-        return response()->json($user);
+        return new UserResource($user);
     }
 
     public function update(Request $request)

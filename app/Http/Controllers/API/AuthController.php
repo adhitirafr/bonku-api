@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Redirect;
 
 class AuthController extends Controller
 {
+    //-- Registrasi untuk pengguna baru
+    
     public function register(UserRegisterRequest $request)
     {
         DB::beginTransaction();
@@ -49,6 +51,9 @@ class AuthController extends Controller
         
     }
 
+    //-- Periksa data input dengan data yang ada pada database
+    // Bila semua syarat terpenuhi, berikan token login
+
     public function login(UserLoginRequest $request)
     {
         try {
@@ -76,6 +81,7 @@ class AuthController extends Controller
 
             return response()->json([
                 'access_token' => $authToken,
+                'message' => 'User berhasil masuk'
             ], 200);
         }
         catch(ModelNotFoundException $e) {
@@ -89,6 +95,9 @@ class AuthController extends Controller
             ], 404);
         }
     }
+
+    //-- Verifikasi email untuk akun yang baru mendaftar
+    // Bila ditekan, akan redirect ke halaman utama bonku
 
     public function verifyUser($id)
     {

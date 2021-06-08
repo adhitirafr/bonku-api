@@ -11,6 +11,8 @@ use Auth, Log;
 
 class DeptController extends Controller
 {
+    //-- List hutang dari daftar penghutang di Deptor
+    
     public function index(Request $request)
     {
         $deptors = Auth::user()->deptor;

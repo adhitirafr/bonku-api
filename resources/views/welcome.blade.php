@@ -5,7 +5,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Laravel</title>
+        <title>Bonku API</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
@@ -18,15 +18,28 @@
         <style>
             body {
                 font-family: 'Nunito', sans-serif;
+                background-color: #e8e8e8;
+            }
+            .header {
+                background-color: #ff8d5c;
+                font-size: 25px;
+                margin-bottom: 10px;
             }
         </style>
     </head>
     <body class="antialiased">
         <div class="text-center">
-            <h2>API PAGE</h2>
+            <div class="header">
+                API Page
+            </div>
 
-            <div class="mt-2">
-                NOTHING TO SEE HERE...
+            <div>
+                <img src="{{ asset('image/calm.png') }}" alt="sekibanki" width="600px">
+            </div>
+
+            <div class="mt-4">
+                <div>NOTHING TO SEE HERE.</div>
+                <DIV>PLEASE VISIT THE MAIN WEB.</DIV>
             </div>
         </div>
     </body>
