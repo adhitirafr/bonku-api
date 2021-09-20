@@ -41,11 +41,12 @@ class AuthController extends Controller
                 ], 500);
             }
         }
-        catch(\Exception $e) {
+        catch(\Throwable $e) {
             DB::rollback();
 
             return response()->json([
                 'message' => 'Akun tidak dapat dibuat',
+                'error' => $e,
             ], 500);
         }
         
